@@ -24,7 +24,7 @@ jobs:
       - attach_workspace:
           at: ./artifacts
       - run: ls -l ./artifacts
-      - run: ls -l ./artifacts/docker-cloner
+      - run: ./artifacts/docker-cloner -version
 
   # publish-github-release:
 
