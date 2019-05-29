@@ -15,6 +15,7 @@ import (
 )
 
 var (
+	version  = "" // will be set at build time
 	idSet    = false
 	cmdSet   = false
 	entrySet = false
@@ -45,10 +46,16 @@ func main() {
 	EnvVars := flag.String("env_vars", "", "added to existing env vars. Comma delmited list of key=value pairs")
 	interactive := flag.Bool("interactive", true, "set container to be interactive")
 	memory := flag.Int("memory", 0, "override memory limit in MB (min is 100 MB)")
+	printVer := flag.Bool("version", false, "print version")
 
 	flag.Parse()
 
 	flag.Visit(visit)
+
+	if *printVer {
+		fmt.Println("version:", version)
+		os.Exit(0)
+	}
 
 	if !idSet {
 		printErr("id must not be empty")

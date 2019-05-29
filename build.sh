@@ -1,3 +1,8 @@
 #!/bin/bash -eux
 
-GOOS=linux go build -o docker-cloner main.go
+VERSION='0.0.1'
+
+export GO111MODULE=on
+
+# GOOS=linux go build -ldflags "-X main.version=$VERSION" -o docker-cloner main.go
+go build -ldflags "-X main.version=$VERSION" -o docker-cloner main.go
