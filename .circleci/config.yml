@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run: mkdir ./workspace
-      - run: go build -ldflags "-X main.version=$VERSION" -o workspace/docker-cloner
+      - run: GOOS=linux go build -ldflags "-X main.version=$VERSION" -o workspace/docker-cloner
       - persist_to_workspace:
           root: workspace
           paths:
@@ -26,7 +26,7 @@ jobs:
       - run: echo $PATH
       - run: pwd
       - run: ls
-      - run: file artifacts/docker-cloner
+      - run: artifacts/docker-cloner
 
   # publish-github-release:
 
