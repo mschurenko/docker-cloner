@@ -4,12 +4,13 @@ jobs:
   build:
     environment:
       VERSION: 0.0.1
-      GO111MODULE: on
+      GO111MODULE: "on"
     docker:
       - image: golang:latest
     working_directory: /go/src/github.com/mschurenko/docker-cloner
     steps:
       - checkout
+      - run: env
       - run:
           command: go build -ldflags "-X main.version=$VERSION" -o docker-cloner
   # test:
