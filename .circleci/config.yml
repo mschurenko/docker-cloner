@@ -18,7 +18,8 @@ jobs:
             - docker-cloner
   test:
     docker:
-      - image: docker:18.09.1-git
+      # - image: docker:18.09.1-git
+      - image: ubuntu:18.04
     steps:
       - attach_workspace:
           at: ./artifacts
