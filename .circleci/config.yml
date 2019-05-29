@@ -18,9 +18,12 @@ jobs:
           paths:
             - docker-cloner
   test:
-    - attach_workspace:
+    docker:
+      - image: docker:18.09.1-git
+    steps:
+      - attach_workspace:
           at: ./artifacts
-    - run: ls -l ./artifacts
+      - run: ls -l ./artifacts
 
   # publish-github-release:
 
