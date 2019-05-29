@@ -10,10 +10,18 @@ jobs:
     working_directory: /go/src/github.com/mschurenko/docker-cloner
     steps:
       - checkout
-      - run: env
-      - run:
-          command: go build -ldflags "-X main.version=$VERSION" -o docker-cloner
-  # test:
+      - run: mkdir ./workspace
+      - run: go build -ldflags "-X main.version=$VERSION" -o docker-cloner
+      - run: cp -v ./docker-cloner ./workspace
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - docker-cloner
+  test:
+    - attach_workspace:
+          at: ./artifacts
+    - run: ls -l ./artifacts
+
   # publish-github-release:
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
@@ -21,3 +29,6 @@ workflows:
   main:
     jobs:
       - build
+      - test:
+          requires:
+            - build
