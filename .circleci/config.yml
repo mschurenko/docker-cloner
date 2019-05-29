@@ -23,7 +23,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./artifacts
-      - run: ls -l ./artifacts
+      - run: ./artifacts/docker-cloner -v
 
   # publish-github-release:
 
