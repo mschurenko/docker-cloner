@@ -6,7 +6,7 @@ jobs:
       VERSION: 0.0.1
       GO111MODULE: "on"
     docker:
-      - image: golang:latest
+      - image: golang:1.12.4-alpine
     working_directory: /go/src/github.com/mschurenko/docker-cloner
     steps:
       - checkout
@@ -19,7 +19,6 @@ jobs:
   test:
     docker:
       - image: docker:18.09.1-git
-      # - image: circleci/python:latest
     steps:
       - setup_remote_docker
       - attach_workspace:
