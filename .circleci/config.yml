@@ -23,16 +23,13 @@ jobs:
       - setup_remote_docker
       - attach_workspace:
           at: ./artifacts
-      - run: ls -l ./artifacts
-      - run: echo $PATH
-      - run: pwd
-      - run: ls
       - run: docker run --rm -d --name test alpine sleep 120
       - run: >
-          /root/project/artifacts/docker-cloner
+          export c_id=$(./artifacts/docker-cloner
           -memory 200
           -id test
-          -cmd "echo In copy contianer. PASSED"
+          -cmd "echo In copy contianer. PASSED")
+      - run: docker start -ia $c_id
       # - run: artifacts/docker-cloner -version
 
   # publish-github-release:
