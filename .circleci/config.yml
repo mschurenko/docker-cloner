@@ -30,7 +30,7 @@ jobs:
       - run: ls
       - run: docker run --rm -d --name test alpine sleep 120
       - run: >
-          artifacts/docker-cloner
+          /root/project/artifacts/docker-cloner
           -memory 200
           -id test
           -cmd "echo In copy contianer. PASSED"
