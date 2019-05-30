@@ -4,6 +4,7 @@ jobs:
   build:
     environment:
       VERSION: 0.0.1
+      # use go modules
       GO111MODULE: "on"
     docker:
       - image: mschurenko/golang:1.12.4-alpine-git
@@ -23,14 +24,17 @@ jobs:
       - setup_remote_docker
       - attach_workspace:
           at: ./artifacts
+      - run: apk add --no-cache jq
       - run: docker run --rm -d --name test alpine sleep 120
       - run: >
           c_id=$(./artifacts/docker-cloner
           -memory 200
           -id test
-          -cmd "echo In copy contianer. PASSED")
-          && docker start -ia $c_id
-      # - run: artifacts/docker-cloner -version
+          -cmd "echo In copy contianer. PASSED") &&
+          if [[ $(docker inspect $c_id|jq -r '.[0].HostConfig.Memory') -ne $(( 200 * 1024 * 1024 )) ]];then
+            echo "Memory limit mismatch"
+            exit 1
+          fi && docker start -ia $c_id
 
   # publish-github-release:
 
