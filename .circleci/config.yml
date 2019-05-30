@@ -4,15 +4,17 @@ jobs:
   build:
     environment:
       VERSION: &version 0.0.1
-      # use go modules
-      GO111MODULE: "on"
+      GOOS: linux
+      GO111MODULE: "on" # enabled go modules
+      CGO_ENABLED: 0 # so cross compile works between alpine and non-apline
+
     docker:
       - image: &go_image mschurenko/golang:1.12.4-alpine-git
     working_directory: /go/src/github.com/mschurenko/docker-cloner
     steps:
       - checkout
       - run: mkdir ./workspace
-      - run: GOOS=linux go build -ldflags "-X main.version=$VERSION" -o workspace/docker-cloner
+      - run: go build -ldflags "-X main.version=$VERSION" -o workspace/docker-cloner
       - persist_to_workspace:
           root: workspace
           paths:
