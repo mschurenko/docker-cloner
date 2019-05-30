@@ -27,7 +27,7 @@ jobs:
       - run: echo $PATH
       - run: pwd
       - run: ls
-      - run: artifacts/docker-cloner
+      - run: artifacts/docker-cloner -version
 
   # publish-github-release:
 
