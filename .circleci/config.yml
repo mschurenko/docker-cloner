@@ -19,7 +19,7 @@ jobs:
   test:
     docker:
       # - image: docker:18.09.1-git
-      - image: circleci/jessie-curl:latest
+      - image: circleci/python:latest
     steps:
       - attach_workspace:
           at: ./artifacts
