@@ -3,11 +3,11 @@ version: 2.1
 jobs:
   build:
     environment:
-      VERSION: 0.0.1
+      VERSION: &version 0.0.1
       # use go modules
       GO111MODULE: "on"
     docker:
-      - image: mschurenko/golang:1.12.4-alpine-git
+      - image: &go_image mschurenko/golang:1.12.4-alpine-git
     working_directory: /go/src/github.com/mschurenko/docker-cloner
     steps:
       - checkout
@@ -36,9 +36,20 @@ jobs:
             exit 1
           fi && docker start -ia $c_id
 
-  # publish-github-release:
+  publish-github-release:
+    environment:
+      VERSION: *version
+    docker:
+      - image: *go_image
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: "publish github release"
+          command: |
+            go get github.com/tcnksm/ghr
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -n ${VERSION} -soft ${VERSION} ./artifacts/
 
-# Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   main:
     jobs:
@@ -46,3 +57,9 @@ workflows:
       - test:
           requires:
             - build
+      - publish-github-release:
+          filters:
+            branches:
+              only: master
+          requires:
+            - test
