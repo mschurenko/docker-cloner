@@ -18,16 +18,23 @@ jobs:
             - docker-cloner
   test:
     docker:
-      # - image: docker:18.09.1-git
-      - image: circleci/python:latest
+      - image: docker:18.09.1-git
+      # - image: circleci/python:latest
     steps:
+      - setup_remote_docker
       - attach_workspace:
           at: ./artifacts
       - run: ls -l ./artifacts
       - run: echo $PATH
       - run: pwd
       - run: ls
-      - run: artifacts/docker-cloner -version
+      - run: docker run --rm -d --name test alpine sleep 120
+      - run: >
+          artifacts/docker-cloner
+          -memory 200
+          -id test
+          -cmd "echo In copy contianer. PASSED"
+      # - run: artifacts/docker-cloner -version
 
   # publish-github-release:
 
